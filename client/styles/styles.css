@@ -1,0 +1,45 @@
+html{
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100%;
+  width: 100%;
+  background-color: #DDD;
+  overflow-y:scroll;
+}
+
+#wrapper {
+  max-width: 75em;
+  /*1200px*/
+  background-color: #FFF;
+  height: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.padded {
+  padding:1rem;
+}
+
+.messageWrap {
+  margin-top:1rem;
+}
+
+.messageUser {
+  color: purple;
+}
+
+.messageText {}
+
+.friends {
+  font-weight: bold;
+}
+
+
+#userChatRoomInput {}
+#userChatRoomButton {}
+#roomSelector {}
+#userTextBox {width:100%;}
+#userSubmitButton {}

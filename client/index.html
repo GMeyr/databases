@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>chatterbox</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="styles/bootstrap.css">
+  <link rel="stylesheet" href="styles/styles.css">
+
+  <!-- dependencies -->
+  <script src="bower_components/jquery/jquery.min.js"></script>
+  <script src="bower_components/underscore/underscore-min.js"></script>
+  <script src="scripts/bootstrap.js"></script>
+
+  <!-- your scripts -->
+  <script src="env/config.js"></script>
+  <script src="scripts/clientApp.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <div class="padded">
+      <h1>Chatterbox</h1>
+    </div>
+    <div class="padded">
+      <input type="text" id="userChatRoomInput" />
+      <button id="userChatRoomButton">Create A New Chat Room</button>
+    </div>
+    <div class="padded">
+      <select id="roomSelector">
+        <option id="lobby" value="lobby">lobby</option>
+      </select>
+    </div>
+    <div class="padded">
+      <textarea id="userTextBox"></textarea>
+      <button id="userSubmitButton">Submit</button>
+    </div>
+    <div id="main" class="padded">
+
+
+    </div>
+  </div>
+</body>
+
+</html>
