@@ -14,7 +14,7 @@ module.exports = {
         });
       });
 
-    }, // a function which produces all the messages
+    },
     post: function () {
 
     } // a function which can be used to insert a message into the database

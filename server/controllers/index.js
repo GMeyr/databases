@@ -9,7 +9,7 @@ module.exports = {
       models.messages.get().then(function(messageData){
         // res.header("Access-Control-Allow-Origin", "*");
         // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        res.send(messageData);
+        res.json({results:messageData});
       });
     }, // a function which handles a get request for all messages
     post: function (req, res) {} // a function which handles posting a message to the database
