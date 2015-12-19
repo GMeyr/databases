@@ -1,3 +1,11 @@
+ //TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+ //TODO remember to change messageId in the morning in client app   TODO
+ //TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+
+
+
+
+
 $(function(){
 
 //setup environment
@@ -31,13 +39,13 @@ app.roomSelector = $('#roomSelector');
 //query function
 app.queryMessages = function(queryData) {
   if(queryData === undefined){
-    queryData = 'order=-createdAt&where={"roomname":"'+ this.currentRoom +'"}';
+    queryData = this.currentRoom;
   }
   $.ajax({
-    url: 'https://api.parse.com/1/classes/chatterbox',
+    url: 'http://127.0.0.1:3000/classes/' + queryData,
     type: 'GET',
-    data: queryData,
-    contentType: 'application/json',
+    // data: queryData,
+    contentType: 'text/json',
     success: function(data) {
       //create a tempResults array with a length set to our maxMessagesDisplay
       var tempResults = data.results.slice(0, app.maxMessagesDisplay);
@@ -66,7 +74,7 @@ app.createMessage = function(text) {
   };
   //submit a new message
   $.ajax({
-    url: 'https://api.parse.com/1/classes/chatterbox',
+    url: 'http://127.0.0.1:3000/classes/messages',
     type: 'POST',
     data: JSON.stringify(message),
     contentType: 'application/json',
@@ -279,12 +287,13 @@ app.init = function(){
     //run interval to update everything
     app.interval();
   });
+
   //run our query update to gather chat rooms
-  app.queryMessages('order=-createdAt');
+  app.queryMessages('messages');
   //run our first interval to bind click events
-  app.interval();
+  //app.interval();
   //run our interval based functions
-  setInterval(app.interval.bind(this),5000);
+  //setInterval(app.interval.bind(this),5000);
 };
 
 
