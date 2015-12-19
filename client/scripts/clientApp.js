@@ -66,18 +66,18 @@ app.queryMessages = function(queryData) {
 
 
 //message function
-app.createMessage = function(text) {
+app.createMessage = function(userText) {
   var message = {
-    username: this.userName,
-    text: text,
-    roomname: this.currentRoom
+    userName: this.userName,
+    messageText: userText,
+    roomName: this.currentRoom
   };
   //submit a new message
   $.ajax({
     url: 'http://127.0.0.1:3000/classes/messages',
     type: 'POST',
     data: JSON.stringify(message),
-    contentType: 'application/json',
+    contentType: 'text/json',
     success: function(data) {
       console.log('chatterbox: Message sent. Data: ', data);
       //run queryMessages to start the update process
@@ -98,7 +98,7 @@ app.updateMessages = function(resultsArray) {
   var newMessageNodes = {};
   //map new nodes to object for fast comparison
   resultsArray.forEach(function(result) {
-    newMessageNodes[result.objectId] = true;
+    newMessageNodes[result.messageId] = true;
   });
   //remove old nodes via hashmap comparison
   for (var key in this.htmlNodes) {
@@ -113,17 +113,17 @@ app.updateMessages = function(resultsArray) {
   for (var i = 0; i < resultsArray.length; i++) {
     toggleFriend = '';
     //check if we already have the item in our htmlNodes, if not do stuff with resultsArray
-    if (resultsArray[i].objectId in this.htmlNodes === false) {
+    if (resultsArray[i].messageId in this.htmlNodes === false) {
       //check if user is our friends
-      if(resultsArray[i].username in this.friendsList){
+      if(resultsArray[i].userName in this.friendsList){
         toggleFriend = ' friends';
       }
       //build our node string
-      var nodeString = '<div id="' + resultsArray[i].objectId + '" class="messageWrap"><div class="messageUser' + toggleFriend + '" data-username="' + resultsArray[i].username + '" ><span>' + resultsArray[i].username + '</span></div><div class="messageText"><span>' + resultsArray[i].text + '<span></div></div>';
+      var nodeString = '<div id="' + resultsArray[i].messageId + '" class="messageWrap"><div class="messageUser' + toggleFriend + '" data-userName="' + resultsArray[i].userName + '" ><span>' + resultsArray[i].userName + '</span></div><div class="messageText"><span>' + resultsArray[i].messageText + '<span></div></div>';
       //add our node string to the dom
       this.messageArea.append(nodeString);
       //add our new node to htmlNodes to prevent duplication
-      this.htmlNodes[resultsArray[i].objectId] = true;
+      this.htmlNodes[resultsArray[i].messageId] = true;
     }
   }
   //rebind click handlers
@@ -136,11 +136,11 @@ app.updateRooms = function(resultsArray) {
     var optionString = "";
     //loop over resultsArray
     for (var i = 0; i < resultsArray.length; i++) {
-      if (resultsArray[i].roomname !== undefined || resultsArray[i].roomname !== "") {
+      if (resultsArray[i].roomName !== undefined || resultsArray[i].roomName !== "") {
         //check if our room name is already a dom node in our select element
-        if ($("#" + resultsArray[i].roomname).length === 0) {
+        if ($("#" + resultsArray[i].roomName).length === 0) {
           //add the room to our selector
-          this.addRoomToSelector(resultsArray[i].roomname);
+          this.addRoomToSelector(resultsArray[i].roomName);
         }
       }
     }
@@ -170,39 +170,39 @@ app.processData = function(resultsArray){
   var isBadInput = /<|>|\(|\)|\//g;
   //loop through our array
   for(i = 0; i < resultsArray.length; i++){
-    //check objectId for non alphanumeric characters
-    if(!('objectId' in resultsArray[i]) || !resultsArray[i].objectId || resultsArray[i].objectId.match(isAlpha) !== null){
-      //save keys of non alphanumeric objectId's to get deleted later on
+    //check messageId for non alphanumeric characters
+    if(!('messageId' in resultsArray[i]) || !resultsArray[i].messageId || !(typeof resultsArray[i].messageId === 'number')){
+      //save keys of non alphanumeric messageId's to get deleted later on
       keysToDelete.push(i);
       //skip the remaining checks because we're going to delete the object
       continue;
     }
-    //check username and replace
-    if(!('username' in resultsArray[i]) || !resultsArray[i].username || resultsArray[i].username === 'undefined' || resultsArray[i].username.match(isAlphaOrWhiteSpace) !== null){
+    //check userName and replace
+    if(!('userName' in resultsArray[i]) || !resultsArray[i].userName || resultsArray[i].userName === 'undefined' || resultsArray[i].userName.match(isAlphaOrWhiteSpace) !== null){
       //save bad data keys to delete later
       keysToDelete.push(i);
       //skip the remaining checks because this object will be deleted
       continue;
     }
     //replace white space
-    resultsArray[i].username = resultsArray[i].username.replace(/\s/g,'-');
+    resultsArray[i].userName = resultsArray[i].userName.replace(/\s/g,'-');
 
-    //check roomname and replace
-    if(!('roomname' in resultsArray[i])){
-      resultsArray[i].roomname = 'lobby';
+    //check roomName and replace
+    if(!('roomName' in resultsArray[i])){
+      resultsArray[i].roomName = 'lobby';
     }
-    //remove bad data from roomname
-    if(!resultsArray[i].roomname || resultsArray[i].roomname.match(isAlphaOrWhiteSpace) !== null){
+    //remove bad data from roomName
+    if(!resultsArray[i].roomName || resultsArray[i].roomName.match(isAlphaOrWhiteSpace) !== null){
       //save bad data keys to delete later
       keysToDelete.push(i);
       //skip the remaining checks because this object will be deleted
       continue;
     }
     //replace white space
-    resultsArray[i].roomname = resultsArray[i].roomname.replace(/\s/g, '-');
+    resultsArray[i].roomName = resultsArray[i].roomName.replace(/\s/g, '-');
 
     //check text and replace
-    if(!('text' in resultsArray[i]) || !resultsArray[i].text || resultsArray[i].text.match(isBadInput) !== null){
+    if(!('messageText' in resultsArray[i]) || !resultsArray[i].messageText || resultsArray[i].messageText.match(isBadInput) !== null){
       //save bad data keys to delete later
       keysToDelete.push(i);
       //skip the remaining checks because this object will be deleted
@@ -222,7 +222,7 @@ app.setupFriendsClick = function(){
   //get all user names, remove old click handlers via off and add new click handlers
   $('.messageUser').off('click').on('click',function(){
     //pull user name from clicked friend
-    var clickedMessageId = $(this).data('username');
+    var clickedMessageId = $(this).data('userName');
     //add friend to friendsList
     app.friendsList[clickedMessageId] = true;
     //add friend classes to dom nodes
@@ -239,7 +239,7 @@ app.updateFriendsHTML = function(friendName){
   var testElement;
   for(var key in this.htmlNodes){
     testElement = $('#' + key + ' .messageUser');
-    if(testElement.data('username') === friendName){
+    if(testElement.data('userName') === friendName){
       testElement.addClass('friends');
     }
   }
@@ -252,7 +252,7 @@ app.init = function(){
   //fill user name with decodeURI to remove weird characters
   this.userName = decodeURI(window.location.search);
   //remove appended query string
-  this.userName = this.userName.replace(/\?username\=/g, '');
+  this.userName = this.userName.replace(/\?userName\=/g, '');
 
   //CLICK handlers
   //user sends a message
