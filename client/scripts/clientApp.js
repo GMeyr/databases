@@ -1,5 +1,5 @@
  //TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
- //TODO remember to change messageId in the morning in client app   TODO
+ //TODO remember to change id in the morning in client app   TODO
  //TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
 
 
@@ -39,7 +39,7 @@ app.roomSelector = $('#roomSelector');
 //query function
 app.queryMessages = function(queryData) {
   if(queryData === undefined){
-    queryData = messages;
+    queryData = 'messages';
   }
   $.ajax({
     url: 'http://127.0.0.1:3000/classes/' + queryData,
@@ -98,7 +98,7 @@ app.updateMessages = function(resultsArray) {
   var newMessageNodes = {};
   //map new nodes to object for fast comparison
   resultsArray.forEach(function(result) {
-    newMessageNodes[result.messageId] = true;
+    newMessageNodes[result.id] = true;
   });
   //remove old nodes via hashmap comparison
   for (var key in this.htmlNodes) {
@@ -113,17 +113,17 @@ app.updateMessages = function(resultsArray) {
   for (var i = 0; i < resultsArray.length; i++) {
     toggleFriend = '';
     //check if we already have the item in our htmlNodes, if not do stuff with resultsArray
-    if (resultsArray[i].messageId in this.htmlNodes === false) {
+    if (resultsArray[i].id in this.htmlNodes === false) {
       //check if user is our friends
       if(resultsArray[i].userName in this.friendsList){
         toggleFriend = ' friends';
       }
       //build our node string
-      var nodeString = '<div id="' + resultsArray[i].messageId + '" class="messageWrap"><div class="messageUser' + toggleFriend + '" data-userName="' + resultsArray[i].userName + '" ><span>' + resultsArray[i].userName + '</span></div><div class="messageText"><span>' + resultsArray[i].messageText + '<span></div></div>';
+      var nodeString = '<div id="' + resultsArray[i].id + '" class="messageWrap"><div class="messageUser' + toggleFriend + '" data-userName="' + resultsArray[i].userName + '" ><span>' + resultsArray[i].userName + '</span></div><div class="messageText"><span>' + resultsArray[i].messageText + '<span></div></div>';
       //add our node string to the dom
       this.messageArea.append(nodeString);
       //add our new node to htmlNodes to prevent duplication
-      this.htmlNodes[resultsArray[i].messageId] = true;
+      this.htmlNodes[resultsArray[i].id] = true;
     }
   }
   //rebind click handlers
@@ -170,9 +170,9 @@ app.processData = function(resultsArray){
   var isBadInput = /<|>|\(|\)|\//g;
   //loop through our array
   for(i = 0; i < resultsArray.length; i++){
-    //check messageId for non alphanumeric characters
-    if(!('messageId' in resultsArray[i]) || !resultsArray[i].messageId || !(typeof resultsArray[i].messageId === 'number')){
-      //save keys of non alphanumeric messageId's to get deleted later on
+    //check id for non alphanumeric characters
+    if(!('id' in resultsArray[i]) || !resultsArray[i].id || !(typeof resultsArray[i].id === 'number')){
+      //save keys of non alphanumeric id's to get deleted later on
       keysToDelete.push(i);
       //skip the remaining checks because we're going to delete the object
       continue;

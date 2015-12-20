@@ -7,14 +7,13 @@ CREATE DATABASE chat
 USE chat;
 
 CREATE TABLE messages (
-  messageId bigint NOT NULL AUTO_INCREMENT,
+  id bigint NOT NULL AUTO_INCREMENT,
   messageText varchar(640),
-  createdAt bigint,
   userName varchar(32),
   roomName varchar(32),
   -- FOREIGN KEY userName REFERENCES users(userName) ON DELETE CASCADE,
   -- FOREIGN KEY roomName REFERENCES rooms(roomName) ON DELETE CASCADE,
-  PRIMARY KEY (messageId)
+  PRIMARY KEY (id)
 ) ENGINE = INNODB;
 
 CREATE TABLE users (
@@ -26,14 +25,6 @@ CREATE TABLE rooms (
   roomName varchar(32),
   PRIMARY KEY (roomName)
 ) ENGINE = INNODB;
-
-CREATE TABLE friends (
-  friend varchar(32),
-  friendee varchar(32)
-  -- FOREIGN KEY friend REFERENCES users(userName) ON DELETE CASCADE,
-  -- FOREIGN KEY friendee REFERENCES users(userName) ON DELETE CASCADE
-) ENGINE = INNODB;
-
 
 
 /*  Execute this file from the command line by typing:

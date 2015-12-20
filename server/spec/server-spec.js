@@ -64,9 +64,9 @@ describe("Persistent Node Chat Server", function() {
   it("Should output all messages from the DB", function(done) {
     this.timeout(5000);
 
-    var queryString = "INSERT INTO messages (messageText, createdAt, userName, roomName) VALUES (?, ?, ?, ?)";
+    var queryString = "INSERT INTO messages (messageText, userName, roomName) VALUES (?, ?, ?, ?)";
 
-    dbConnection.query(queryString, [ "Men like you can never change!", 1, "Trumbo", "main" ], function(err) {
+    dbConnection.query(queryString, [ "Men like you can never change!", "Trumbo", "main" ], function(err) {
       if (err) {
         throw err;
       }

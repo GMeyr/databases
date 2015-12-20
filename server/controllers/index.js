@@ -14,8 +14,7 @@ module.exports = {
       });
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      models.messages.post(req.body.messageText, req.body.userName, req.body.roomName);
-      res.sendStatus(201);
+      models.messages.post(req.body.messageText, req.body.userName, req.body.roomName).then(function(){res.sendStatus(201);});
     }
   },
 
@@ -27,9 +26,7 @@ module.exports = {
       });
     },
     post: function (req, res) {
-      models.users.post(req.body.userName);
-      res.sendStatus(201);
+      models.users.post(req.body.userName).then(function(){res.sendStatus(201);});      
     }
   }
 };
-
