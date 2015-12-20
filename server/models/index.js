@@ -54,11 +54,11 @@ module.exports = {
           }
           resolve(results);
         });
-      });      
+      });
 
       getUserName.then(function(userNameArray){
         if(userNameArray.length === 0){
-          db.conn.query('INSERT INTO USERS (userName) VALUES (?)', [userName]);
+          db.conn.query('INSERT INTO users (userName) VALUES (?)', [userName]);
         }
       });
 
