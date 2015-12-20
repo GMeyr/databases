@@ -19,7 +19,7 @@ app.maxMessagesDisplay = 20;
 //current room
 app.currentRoom = 'lobby';
 //userName filled in later
-app.userName = '';
+app.userName = 'Bob Testuser';
 //message area
 app.messageArea = $('#main');
 //userTextBox
@@ -39,13 +39,13 @@ app.roomSelector = $('#roomSelector');
 //query function
 app.queryMessages = function(queryData) {
   if(queryData === undefined){
-    queryData = this.currentRoom;
+    queryData = messages;
   }
   $.ajax({
     url: 'http://127.0.0.1:3000/classes/' + queryData,
     type: 'GET',
     // data: queryData,
-    contentType: 'text/json',
+    contentType: 'application/json',
     success: function(data) {
       //create a tempResults array with a length set to our maxMessagesDisplay
       var tempResults = data.results.slice(0, app.maxMessagesDisplay);
@@ -77,7 +77,7 @@ app.createMessage = function(userText) {
     url: 'http://127.0.0.1:3000/classes/messages',
     type: 'POST',
     data: JSON.stringify(message),
-    contentType: 'text/json',
+    contentType: 'application/json',
     success: function(data) {
       console.log('chatterbox: Message sent. Data: ', data);
       //run queryMessages to start the update process
@@ -249,10 +249,6 @@ app.updateFriendsHTML = function(friendName){
 
 //init function
 app.init = function(){
-  //fill user name with decodeURI to remove weird characters
-  this.userName = decodeURI(window.location.search);
-  //remove appended query string
-  this.userName = this.userName.replace(/\?userName\=/g, '');
 
   //CLICK handlers
   //user sends a message
